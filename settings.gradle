@@ -1,0 +1,4 @@
+include ':noDoubleClickLib'
+include ':noDoubleClickPugin'
+include ':app'
+rootProject.name = "NoDoubleClick"
