@@ -7,8 +7,6 @@ plugins {
 
     // 应用 Maven Publish Plugin 发布插件
     id 'maven-publish'
-
-    id 'com.github.dcendents.android-maven'
 }
 
 dependencies {
