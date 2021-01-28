@@ -8,6 +8,10 @@ public class NoDoubleClickUtil {
     private static long time;
     private static long doubleClickTime = 500;
 
+    /**
+     * 按照设置的时间间隔，判断是否是双击。如果是双击，返回true
+     * @return
+     */
     public static boolean isOnDoubleClick() {
         long currentTime = System.currentTimeMillis();
         if (currentTime - time < doubleClickTime) {
@@ -17,6 +21,10 @@ public class NoDoubleClickUtil {
         return false;
     }
 
+    /**
+     * 设置双击之间的时间间隔，单位ms，可以不设置。不设置时，默认为500ms
+     * @param doubleClickTime
+     */
     public static void init(long doubleClickTime){
         NoDoubleClickUtil.doubleClickTime = doubleClickTime;
     }

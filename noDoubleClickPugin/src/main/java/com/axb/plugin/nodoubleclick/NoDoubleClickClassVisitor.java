@@ -4,7 +4,11 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class NoDoubleClickClassVisitor extends ClassVisitor {
+    private List<String> lambdaMethods = new ArrayList<>();
     public NoDoubleClickClassVisitor(ClassVisitor cv) {
         super(Opcodes.ASM7,cv);
     }
@@ -12,7 +16,7 @@ public class NoDoubleClickClassVisitor extends ClassVisitor {
     @Override
     public MethodVisitor visitMethod(int access, String name, String desc, String signature, String[] exceptions) {
         MethodVisitor methodVisitor = cv.visitMethod(access, name, desc, signature, exceptions);
-        return new NoDoubleClickMethodVisitor(methodVisitor,name);
+        return new NoDoubleClickMethodVisitor(methodVisitor,name,lambdaMethods);
     }
 
     @Override
