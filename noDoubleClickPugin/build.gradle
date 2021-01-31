@@ -48,3 +48,5 @@ publishing {
         }
     }
 }
+
+apply from: 'j-build.gradle'
