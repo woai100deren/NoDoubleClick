@@ -48,5 +48,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation project(':noDoubleClickLib')
+//    implementation project(':noDoubleClickLib')
+    implementation 'com.axb.plugin:noDoubleClickLib:1.0.0'
 }

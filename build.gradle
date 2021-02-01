@@ -3,13 +3,19 @@ buildscript {
     repositories {
         google()
         jcenter()
-        maven {
-            url uri("$rootDir/repo")
+        //本地模式下的maven仓库
+//        maven {
+//            url uri("$rootDir/repo")
+//        }
+
+        //使用已发布到jCenter的在线maven地址
+        maven{
+            url uri('https://dl.bintray.com/woai100deren/NoDoubleClick')
         }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.2'
-        classpath "com.axb.plugin:noDoubleClickPlugin:0.0.1"
+        classpath "com.axb.plugin:noDoubleClickPugin:1.0.0"
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
 
@@ -23,6 +29,16 @@ allprojects {
     repositories {
         google()
         jcenter()
+        //引入发布到jCenter的在线maven仓库
+        maven{
+            url uri('https://dl.bintray.com/woai100deren/NoDoubleClick')
+        }
+    }
+
+    // 防止中文乱码
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+        options.addStringOption('encoding', 'UTF-8')
     }
 }
 

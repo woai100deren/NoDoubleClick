@@ -2,12 +2,60 @@
 
 ------
 
-**一、框架目前支持以下几种，后续有需求逐步增加。**
+一、使用：
+
+- 工程`build.gradle`中引入：
+
+```groovy
+buildscript {
+    repositories {
+    	......
+    }
+    dependencies {
+        ......
+        classpath "com.axb.plugin:noDoubleClickPugin:1.0.0"
+    }
+}
+
+allprojects {
+    repositories {
+    	......
+        jcenter()
+        //引入发布到jCenter的在线maven仓库
+        maven{
+            url uri('https://dl.bintray.com/woai100deren/NoDoubleClick')
+        }
+    }
+}
+......
+```
+
+- 要使用到的module中的`build.gradle`引入
+
+```groovy
+plugins {
+    ......
+    id 'com.axb.plugin.noDoubleClick'
+}
+
+或者
+
+apply plugin 'com.axb.plugin.noDoubleClick'
+
+......
+
+//引入工具类
+dependencies {
+	implementation 'com.axb.plugin:noDoubleClickLib:1.0.0'
+}
+```
+
+**二、框架目前支持以下几种，后续有需求逐步增加。**
 
 - View的OnClick事件
 - ListView的OnItemClick事件
 
-**二、说明：**
+**三、说明：**
 
 - 此方案采用了ASM字节码插装方式，通过gradle的Transform阶段进行插装。由于自定义的Transform会在ProguardTransform(混淆)和DexTransform(class编译成dex文件)之前执行，所以不需要考虑混淆的情况。
 
@@ -19,7 +67,7 @@
   });
   ```
 
-**三、原理：**
+**四、原理：**
 
 - 本质上，是在你的代码基础上，在外层包裹了一层判断。比如将上述Lambda写法最终改变成了如下：
 
@@ -32,7 +80,7 @@
   });
   ```
 
-**<span style="color:red;">四、注意：</span>**
+**五、注意：**
 
 - 不支持在layout的xml中定义click事件，比如：
 
