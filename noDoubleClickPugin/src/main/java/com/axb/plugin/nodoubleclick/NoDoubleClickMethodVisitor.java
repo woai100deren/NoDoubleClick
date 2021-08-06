@@ -1,17 +1,16 @@
 package com.axb.plugin.nodoubleclick;
 
-import org.objectweb.asm.Attribute;
+import org.objectweb.asm.AnnotationVisitor;
 import org.objectweb.asm.Handle;
 import org.objectweb.asm.Label;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class NoDoubleClickMethodVisitor extends MethodVisitor {
     private String methodName;
     private List<String> lambdaMethods;
+    private boolean needAddCode = false;
     public NoDoubleClickMethodVisitor(MethodVisitor mv,String methodName,List<String> lambdaMethods) {
         super(Opcodes.ASM7,mv);
         this.methodName = methodName;
@@ -24,20 +23,24 @@ public class NoDoubleClickMethodVisitor extends MethodVisitor {
     @Override
     public void visitCode() {
         super.visitCode();
+//        Log.e("NoDoubleClickMethodVisitor","11111111111111111111="+methodName+",needAddCode = "+needAddCode);
         //if("onClick".equals(methodName) || methodName.startsWith("lambda$"))
         //放弃对Lambda语法的支持，因为无法判断Lambda是用在什么方法中，不能判断出来是在onClick事件中
-        if("onClick".equals(methodName) || ("onItemClick".equals(methodName))){
+        if(("onClick".equals(methodName) || ("onItemClick".equals(methodName))) && needAddCode){
             addCode();
         }
 
-        if(lambdaMethods.contains(methodName)){
+        if(lambdaMethods.contains(methodName) && needAddCode){
             addCode();
         }
+
+        needAddCode = false;
     }
 
     @Override
     public void visitInvokeDynamicInsn(String name, String descriptor, Handle bootstrapMethodHandle, Object... bootstrapMethodArguments) {
         super.visitInvokeDynamicInsn(name, descriptor, bootstrapMethodHandle, bootstrapMethodArguments);
+//        Log.e("NoDoubleClickMethodVisitor","222222222222222="+name);
         for (Object object : bootstrapMethodArguments) {
             //以下是对lambda写法的支持
             //对view的click事件
@@ -55,6 +58,16 @@ public class NoDoubleClickMethodVisitor extends MethodVisitor {
                 lambdaMethods.add(handle.getName());
             }
         }
+    }
+
+    @Override
+    public AnnotationVisitor visitAnnotation(String descriptor, boolean visible) {
+//        Log.e("NoDoubleClickMethodVisitor","333333333333="+descriptor);
+        //匹配了注解的方法才加上防双击
+        if("Lcom/axb/plugin/nodoubleclick/lib/annotation/NoDoubleClick;".equals(descriptor)){
+            needAddCode = true;
+        }
+        return super.visitAnnotation(descriptor, visible);
     }
 
     private void addCode(){

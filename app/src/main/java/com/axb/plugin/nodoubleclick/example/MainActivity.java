@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.axb.plugin.nodoubleclick.lib.NoDoubleClickUtil;
+import com.axb.plugin.nodoubleclick.lib.annotation.NoDoubleClick;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,11 +26,13 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         NoDoubleClickUtil.init(1000);
 
         findViewById(R.id.button1).setOnClickListener(new View.OnClickListener() {
+            @NoDoubleClick
             @Override
             public void onClick(View v) {
                 Log.e("TAG","button1被点击了："+System.currentTimeMillis());
             }
         });
+
 
         findViewById(R.id.button2).setOnClickListener(v -> {
             Log.e("TAG","button2被点击了："+System.currentTimeMillis());
@@ -50,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         listView.setOnItemClickListener((parent, view, position, id) -> Log.e("TAG","listView被点击了："+System.currentTimeMillis()));
     }
 
+    @NoDoubleClick
     @Override
     public void onClick(View v) {
         switch (v.getId()){
